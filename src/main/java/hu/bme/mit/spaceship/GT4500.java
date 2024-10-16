@@ -1,5 +1,7 @@
 package hu.bme.mit.spaceship;
 
+import java.util.Random;
+
 /**
 * A simple spaceship with two proton torpedo stores and four lasers
 */
@@ -37,20 +39,20 @@ public class GT4500 implements SpaceShip {
   public boolean fireTorpedo(FiringMode firingMode) {
 
     boolean firingSuccess = false;
-
+    Random generator = new Random();
     switch (firingMode) {
       case SINGLE:
         if (wasPrimaryFiredLast) {
           // try to fire the secondary first
           if (! secondaryTorpedoStore.isEmpty()) {
-            firingSuccess = secondaryTorpedoStore.fire(1);
+            firingSuccess = secondaryTorpedoStore.fire(1, generator);
             wasPrimaryFiredLast = false;
           }
           else {
             // although primary was fired last time, but the secondary is empty
             // thus try to fire primary again
             if (! primaryTorpedoStore.isEmpty()) {
-              firingSuccess = primaryTorpedoStore.fire(1);
+              firingSuccess = primaryTorpedoStore.fire(1, generator);
               wasPrimaryFiredLast = true;
             }
 
@@ -60,14 +62,14 @@ public class GT4500 implements SpaceShip {
         else {
           // try to fire the primary first
           if (! primaryTorpedoStore.isEmpty()) {
-            firingSuccess = primaryTorpedoStore.fire(1);
+            firingSuccess = primaryTorpedoStore.fire(1, generator);
             wasPrimaryFiredLast = true;
           }
           else {
             // although secondary was fired last time, but primary is empty
             // thus try to fire secondary again
             if (! secondaryTorpedoStore.isEmpty()) {
-              firingSuccess = secondaryTorpedoStore.fire(1);
+              firingSuccess = secondaryTorpedoStore.fire(1, generator);
               wasPrimaryFiredLast = false;
             }
 
@@ -82,10 +84,10 @@ public class GT4500 implements SpaceShip {
         boolean secondarySuccess = false;
 
         if (! primaryTorpedoStore.isEmpty()) {
-          primarySuccess = primaryTorpedoStore.fire(1);
+          primarySuccess = primaryTorpedoStore.fire(1, generator);
         }
         if (! secondaryTorpedoStore.isEmpty()) {
-          secondarySuccess = secondaryTorpedoStore.fire(1);
+          secondarySuccess = secondaryTorpedoStore.fire(1, generator);
         }
 
         firingSuccess = primarySuccess || secondarySuccess;
